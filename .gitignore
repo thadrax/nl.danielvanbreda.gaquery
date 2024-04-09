@@ -2,3 +2,4 @@
 /node_modules/
 /.homeybuild/
 lib/devicecredentials.json
+lib/tokens.json
