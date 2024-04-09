@@ -1,6 +1,8 @@
 import Homey from 'homey';
 
 const { OAuth2Driver } = require('homey-oauth2app');
+const path = require('path');
+const GoogleAssistant = require('google-assistant');
 
 module.exports = class MyBrandDriver extends OAuth2Driver {
 
@@ -13,10 +15,7 @@ module.exports = class MyBrandDriver extends OAuth2Driver {
       
       
       //https://www.npmjs.com/package/google-assistant
-      
-
-      
-     
+    
       const config = {
         auth: {
           keyFilePath: path.resolve(__dirname, './lib/devicecredentials.json'),
