@@ -3,3 +3,4 @@
 /.homeybuild/
 lib/devicecredentials.json
 lib/tokens.json
+.DS_Store
