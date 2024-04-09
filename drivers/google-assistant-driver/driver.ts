@@ -18,7 +18,7 @@ module.exports = class MyBrandDriver extends OAuth2Driver {
     const SCOPES = [ 'https://www.googleapis.com/auth/userinfo.profile','https://www.googleapis.com/auth/userinfo.email' ];
     const REDIRECT_URI = 'https://callback.athom.com/oauth2/callback'; // Default: 'https://callback.athom.com/oauth2/callback'
 
-    var params = { "client_id": encodeURIComponent(CLIENT_ID), "client_secret" : encodeURIComponent(CLIENT_SECRET), "redirect_uri" : encodeURIComponent(REDIRECT_URI), "scope" : SCOPES }
+    var params = { client_id: encodeURIComponent(CLIENT_ID), client_secret : encodeURIComponent(CLIENT_SECRET), redirect_uri : encodeURIComponent(REDIRECT_URI), "scope" : SCOPES }
 
     console.log(params);
 
