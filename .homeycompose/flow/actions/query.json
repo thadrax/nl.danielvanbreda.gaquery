@@ -1,0 +1,33 @@
+{
+  "title": {
+    "en": "Query",
+    "nl": "Vraag"
+  },
+  "id": "query",
+  "hint": {
+    "en": "Send a query to Google Assistant",
+    "nl": "Stuur een vraag naar Google Assistant"
+  },
+  "titleFormatted": {
+    "en": "Ask [[query]] to Google Assistant. New conversation: [[new]]",
+    "nl": "Vraag [[query]] naar Google Assistant. Nieuw gesprek: [[new]]"
+  },
+  "args": [
+    {
+      "type": "text",
+      "name": "query",
+      "placeholder": {
+        "en": "query",
+		"nl": "vraag"
+      }
+    },
+    {
+      "type": "checkbox",
+      "name": "new",
+      "placeholder": {
+        "en": "New conversation?",
+		"nl": "Nieuw gesprek?"
+      }
+    }
+  ]
+}

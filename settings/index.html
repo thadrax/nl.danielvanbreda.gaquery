@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- The '/homey.js' script must be included in your settings view to work -->
+    <script
+      type="text/javascript"
+      src="/homey.js"
+      data-origin="settings"
+    ></script>
+  </head>
+  <body>
+    <header class="homey-header">
+      <h1 class="homey-title" data-i18n="settings.title">
+        <!-- This will be filled with the translated string with key 'settings.title'. -->
+      </h1>
+      <p class="homey-subtitle" data-i18n="settings.subtitle">
+        <!-- This field will also be translated -->
+      </p>
+    </header>
+
+    <fieldset class="homey-form-fieldset">
+      <legend class="homey-form-legend">Google Assistant Client ID</legend>
+
+      <div class="homey-form-group">
+        <label class="homey-form-label" for="clientid">Client ID</label>
+        <input class="homey-form-input" id="clientid" type="text" value="" />
+
+        <label class="homey-form-label" for="clientsecret">Client Secret</label>
+        <input class="homey-form-input" id="clientsecret" type="text" value="" />
+		
+        <label class="homey-form-label" for="token">Access Token</label>
+        <input class="homey-form-input" id="token" type="text" value="" />
+		
+		<button id="btn-gettoken" class="homey-button-primary-full">Get token</button>
+      </div>
+    
+    </fieldset>
+
+    <button id="save" class="homey-button-primary-full">Save changes</button>
+
+    <script type="text/javascript">
+      // a method named 'onHomeyReady' must be present in your code
+      function onHomeyReady(Homey) {
+        // Tell Homey we're ready to be displayed
+        Homey.ready();
+
+        var clientidElement = document.getElementById("clientid");
+        var clientsecretElement = document.getElementById("clientsecret");
+		var tokenElement = document.getElementById("token");
+
+        var saveElement = document.getElementById("save");
+		 var gettokenElement = document.getElementById("btn-gettoken");
+
+        Homey.get("clientid", function (err, clientid) {
+          if (err) return Homey.alert(err);
+          clientidElement.value = clientid;
+        });
+
+        Homey.get("clientsecret", function (err, clientsecret) {
+          if (err) return Homey.alert(err);
+          clientsecretElement.value = clientsecret;
+        });
+		
+        Homey.get("token", function (err, token) {
+          if (err) return Homey.alert(err);
+          tokenElement.value = token;
+        });
+		
+		
+
+  
+
+        saveElement.addEventListener("click", function (e) {
+          Homey.set("clientid", clientidElement.value, function (err) {
+            if (err) return Homey.alert(err);
+          });
+          Homey.set("clientsecret", clientsecretElement.value, function (err) {
+            if (err) return Homey.alert(err);
+          });
+          Homey.set("token", tokenElement.value, function (err) {
+            if (err) return Homey.alert(err);
+          });
+        
+        });
+		
+		gettokenElement.addEventListener("click",getToken);
+		
+	  	  function getToken() {
+	  	    	const settings = this.getSettings();
+				const API_URL = "https://accounts.google.com/o/oauth2/auth?response_type=token";
+				const CALLBACK_URL = "https://callback.athom.com/oauth2/callback";
+				const SCOPE = "https://www.googleapis.com/auth/cloud-platform.read-only";
+
+
+				//https://accounts.google.com/o/oauth2/auth?response_type=token&scope=https://www.googleapis.com/auth/cloud-platform.read-only&client_id=361248910627-sbt2ehglhgptp0ksjqfgk1cv32f1162l.apps.googleusercontent.com&redirect_uri=https://callback.athom.com/oauth2/callback
+				
+	  		  	const CLIENT_ID = settings.clientid; //this.homey.settings.get('clientid');//Homey.env.CLIENT_ID;
+			
+	
+	  		  	const OAUTH_URL = `${API_URL}&client_id=${CLIENT_ID}&redirect_uri=${CALLBACK_URL}&scope=${SCOPE}`;
+	  		  	console.log(OAUTH_URL);
+	
+  
+	  		     /* const myOAuth2Callback = await this.homey.cloud.createOAuth2Callback(OAUTH_URL);
+
+	  		      myOAuth2Callback
+	  		        .on("url", (url) => {
+	  		          // dend the URL to the front-end to open a popup
+	  		          session.emit("url", url);
+	  		        })
+	  		        .on("token", (token) => {
+	  		          // ... swap your code here for an access token
+
+	  		          // tell the front-end we're done
+	  		          session.emit("authorized");
+	  		        });*/
+	  	  }
+		
+      }
+	  
+	  
+	  
+    </script>
+  </body>
+</html>
