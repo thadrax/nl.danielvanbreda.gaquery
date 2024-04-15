@@ -7,6 +7,7 @@ const MyBrandOAuth2Client = require('./lib/MyBrandOAuth2Client');
 const path = require('path');
 const GoogleAssistant = require('google-assistant');
 
+
 var CLIENT_ID = "";
 var CLIENT_SECRET = "";
 var TOKEN = "";
@@ -38,27 +39,33 @@ module.exports = class MyBrandApp extends OAuth2App {
         this.goWithTheFlow();
   }
 
+  async getGaDevice(){
+    let driver = this.homey.drivers.getDriver('google-assistant-driver');
+    if (driver == undefined){
+      throw new Error('No driver found.');
+    }
+
+    let device = driver.getDevices().filter(e=>{ return ( e.getData().id == this.getData().id ) })[0];
+    if (device == undefined){
+      throw new Error('No device found.');
+    }
+    return device; 
+  }
+
   async goWithTheFlow() {
+
+      let device = await this.getGaDevice();
+
       this.homey.flow.getActionCard('query')
       .registerRunListener((args, state) => {
           return new Promise((resolve, reject) => {
       
-      
       //https://www.npmjs.com/package/google-assistant
-      
-
-      
-      
      
       const config = {
         auth: {
-          keyFilePath: path.resolve(__dirname, './lib/devicecredentials.json'),
-          // where you want the tokens to be saved
-          // will create the directory if not already there
-          savedTokensPath: path.resolve(__dirname, './lib/tokens.json'),
-          // you can also pass an oauth2 client instead if you've handled
-          // auth in a different workflow. This trumps the other params.
-          //oauth2Client: MyBrandOAuth2Client
+          
+          oauth2Client: device.settings.oauth
       
         },
         // this param is optional, but all options will be shown
