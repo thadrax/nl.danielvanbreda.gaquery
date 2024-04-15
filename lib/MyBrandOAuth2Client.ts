@@ -19,17 +19,17 @@ module.exports = class MyBrandOAuth2Client extends OAuth2Client {
       throw new OAuth2Error(body.error);
   }
 
-  async getThings({ color }) {
+  async getThings({ code }) {
     return this.get({
-      path: '/things',
-      query: { color },
+      path: '',
+      query: { code },
     });
   }
 
-  async updateThing({ id, thing }) {
+  async updateThing({ id, code }) {
     return this.put({
-      path: `/thing/${id}`,
-      json: { thing },
+      path: `${id}`,
+      json: { code },
     });
   }
 
