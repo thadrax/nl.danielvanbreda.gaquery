@@ -14,9 +14,13 @@
   "dependencies": {
     "audit": "^0.0.6",
     "fix": "^0.0.3",
-    "google-assistant": "github:thadrax/google-assistant-edit",
+    "google-assistant": "^0.7.0",
     "homey-oauth2app": "^3.5.7",
     "npm": "^10.5.2",
-    "update": "^0.7.4"
+    "update": "^0.4.2"
+  },
+  "overrides": {
+    "google-auth-library": "9.8.0",
+    "@grpc/grpc-js": "1.10.6"
   }
 }
