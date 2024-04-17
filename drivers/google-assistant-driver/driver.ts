@@ -32,25 +32,13 @@ module.exports = class MyBrandDriver extends OAuth2Driver {
     console.log("https://accounts.google.com/o/oauth2/auth?response_type=code" + "&client_id="+ CLIENT_ID /*"&client_secret="+ CLIENT_SECRET+ */ + "&redirect_uri="+ REDIRECT_URI + "&scope="+ SCOPES.join(" ")  )
     console.log("PARAMS",params);
 
+
+    //TEST QUERY
+    this.sendQuery(oAuth2Client, "Play Graceland on Spotify", true);
     
 
-    let data = await oAuth2Client.getThings(params);
+//    let data = await oAuth2Client.getThings(params);
 
-    //console.log("DATA",data);
-
-    /*var jsonData = data.toJSON();
-
-    console.log("JSON",jsonData);*/
-
-    /*console.log(jsonData.token);
-
-    var hmy = this.homey;  
-
-    hmy.set("token", jsonData.token, function (err) {
-      if (err) {
-        hmy.alert(err);
-      } 
-    });*/
 
     var devices: object[] = [];
     for (let i=0; i<1; i++){
@@ -62,6 +50,96 @@ module.exports = class MyBrandDriver extends OAuth2Driver {
 
    
 
+  }
+
+  async sendQuery(oAuth2Client, query, is_new) {
+
+
+    const config = {
+      auth: {
+        
+        oauth2Client: oAuth2Client
+       
+    
+      },
+      // this param is optional, but all options will be shown
+      conversation: {
+      
+        textQuery: query, // if this is set, audio input is ignored
+        isNew: is_new, // set this to true if you want to force a new conversation and ignore the old state
+        screen: {
+          isOn: true, // set this to true if you want to output results to a screen
+        },
+      },
+    };
+
+    this.log(config.auth);
+
+    //ERROR DUE grpc (deprecated by grpc/grpc-js): googleCredentials.getRequestMetadata is not a function
+
+    
+    const assistant = new GoogleAssistant(config.auth);
+    
+    this.log("assistant ready");
+
+    // starts a new conversation with the assistant
+    const startConversation = (conversation) => {
+      // setup the conversation and send data to it
+      // for a full example, see `examples/mic-speaker.js`
+
+      conversation
+        .on('audio-data', (data) => {
+          // do stuff with the audio data from the server
+          // usually send it to some audio output / file
+        })
+        .on('end-of-utterance', () => {
+          // do stuff when done speaking to the assistant
+          // usually just stop your audio input
+        })
+        .on('transcription', (data) => {
+          // do stuff with the words you are saying to the assistant
+        })
+        .on('response', (text) => {
+          console.log(text);
+          // do stuff with the text that the assistant said back
+        })
+        .on('volume-percent', (percent) => {
+          // do stuff with a volume percent change (range from 1-100)
+        })
+        .on('device-action', (action) => {
+          // if you've set this device up to handle actions, you'll get that here
+        })
+        .on('screen-data', (screen) => {
+          // if the screen.isOn flag was set to true, you'll get the format and data of the output
+        })
+        .on('ended', (error, continueConversation) => {
+          // once the conversation is ended, see if we need to follow up
+          if (error) console.log('Conversation Ended Error:', error);
+          else if (continueConversation) assistant.start();
+          else console.log('Conversation Complete');
+        })
+        .on('data', (data) => {
+          // raw data from the google assistant conversation
+          // useful for debugging or if something is not covered above
+        })
+        .on('error', (error) => {
+        
+        this.log(error);
+          // handle error messages
+        })
+    };
+
+    // will start a conversation and wait for audio data
+    // as soon as it's ready
+    assistant
+      .on('ready', () => assistant.start(config.conversation))
+      .on('started', startConversation);
+    
+    
+      
+    
+     
+    
   }
 
 }

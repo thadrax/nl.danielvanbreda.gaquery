@@ -15,7 +15,11 @@
     "typescript": "^5.4.4"
   },
   "dependencies": {
+    "audit": "^0.0.6",
+    "fix": "^0.0.6",
     "google-assistant": "^0.7.0",
-    "homey-oauth2app": "^3.5.7"
+    "google-auth-library": "^6.1.6",
+    "homey-oauth2app": "^3.5.7",
+    "npm": "^10.5.2"
   }
 }

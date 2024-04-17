@@ -36,10 +36,10 @@ module.exports = class MyBrandApp extends OAuth2App {
        /* this.foundDevices = [];
 
         this.discoverDevices();*/
-        this.goWithTheFlow();
+        //this.goWithTheFlow();
   }
 
-  async getGaDevice(){
+  /*async getGaDevice(){
     let driver = this.homey.drivers.getDriver('google-assistant-driver');
     if (driver == undefined){
       throw new Error('No driver found.');
@@ -144,6 +144,6 @@ module.exports = class MyBrandApp extends OAuth2App {
           });
       })
     
-  }
+  }*/
 
 }
