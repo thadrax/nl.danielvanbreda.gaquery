@@ -5,6 +5,12 @@ const { OAuth2Driver } = require('homey-oauth2app');
 const path = require('path');
 const GoogleAssistant = require('google-assistant');
 
+const mkdirp = require('mkdirp');
+const fs = require('fs');
+
+const SAVED_TOKENS_PATH = path.resolve(__dirname, './../../lib/tokens.json');
+const KEY_FILE_PATH = path.resolve(__dirname, './../../lib/devicecredentials.json');
+
 module.exports = class MyBrandDriver extends OAuth2Driver {
 
   async onOAuth2Init() {
@@ -21,6 +27,7 @@ module.exports = class MyBrandDriver extends OAuth2Driver {
 		const CLIENT_SECRET = settings.get('clientsecret');
 		const TOKEN = settings.get('token');
 
+
     const SCOPES = [ 'https://www.googleapis.com/auth/userinfo.profile','https://www.googleapis.com/auth/userinfo.email' ];
    const REDIRECT_URI = 'https://callback.athom.com/oauth2/callback'; // Default: 'https://callback.athom.com/oauth2/callback'
 
@@ -32,6 +39,17 @@ module.exports = class MyBrandDriver extends OAuth2Driver {
     console.log("https://accounts.google.com/o/oauth2/auth?response_type=code" + "&client_id="+ CLIENT_ID /*"&client_secret="+ CLIENT_SECRET+ */ + "&redirect_uri="+ REDIRECT_URI + "&scope="+ SCOPES.join(" ")  )
     console.log("PARAMS",params);
 
+    console.log("TOKEN:",oAuth2Client._token, oAuth2Client._token.access_token);
+
+    //SAVE TOKENS
+    mkdirp(path.dirname(SAVED_TOKENS_PATH))
+      .then(() => {
+        console.log(JSON.stringify(oAuth2Client._token));
+        fs.writeFile(SAVED_TOKENS_PATH, JSON.stringify(oAuth2Client._token), () => {});
+      })
+      .catch((error) => {
+        console.log('Error saving tokens:', error.message);
+      });
 
     //TEST QUERY
     this.sendQuery(oAuth2Client, "Play Graceland on Spotify", true);
@@ -57,7 +75,8 @@ module.exports = class MyBrandDriver extends OAuth2Driver {
 
     const config = {
       auth: {
-        
+        keyFilePath: KEY_FILE_PATH,
+        savedTokensPath: SAVED_TOKENS_PATH,
         oauth2Client: oAuth2Client
        
     
